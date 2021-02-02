@@ -1,0 +1,23 @@
+digraph {
+	graph [fontname=Arial, nodesep=0.125, ranksep=0.25];
+	node [fontcolor=white, fontname=Arial, height=0, shape=box, style=filled, width=0];
+	edge [fontname=Arial];
+	1 [color="#0ba45a", fontcolor="#ffffff", fontsize="10.00", label="cos\n37.06%\n(37.06%)"];
+	2 [color="#0c7e8f", fontcolor="#ffffff", fontsize="10.00", label="sinl\n21.68%\n(21.68%)"];
+	3 [color="#0c708c", fontcolor="#ffffff", fontsize="10.00", label="__ieee754_atan2\n19.58%\n(19.58%)"];
+	4 [color="#0d3a7f", fontcolor="#ffffff", fontsize="10.00", label="__acos_finite\n9.79%\n(9.79%)"];
+	5 [color="#0d1f78", fontcolor="#ffffff", fontsize="10.00", label="Find_Nearest_Waypoint\n4.20%\n(0.70%)\n10000×"];
+	5 -> 9 [arrowsize="0.35", color="#0d1976", fontcolor="#0d1976", fontsize="10.00", label="2.80%\n1640000×", labeldistance="0.50", penwidth="0.50"];
+	5 -> 11 [arrowsize="0.35", color="#0d1074", fontcolor="#0d1074", fontsize="10.00", label="0.70%\n1650000×", labeldistance="0.50", penwidth="0.50"];
+	6 [color="#0d1f78", fontcolor="#ffffff", fontsize="10.00", label="main\n4.20%\n(0.00%)\n1×"];
+	6 -> 5 [arrowsize="0.35", color="#0d1f78", fontcolor="#0d1f78", fontsize="10.00", label="4.20%\n10000×", labeldistance="0.50", penwidth="0.50"];
+	7 [color="#0d1f78", fontcolor="#ffffff", fontsize="10.00", label="__libc_start_main\n4.20%\n(0.00%)"];
+	7 -> 6 [arrowsize="0.35", color="#0d1f78", fontcolor="#0d1f78", fontsize="10.00", label="4.20%\n1×", labeldistance="0.50", penwidth="0.50"];
+	8 [color="#0d1c77", fontcolor="#ffffff", fontsize="10.00", label="acosf32x\n3.50%\n(3.50%)"];
+	9 [color="#0d1976", fontcolor="#ffffff", fontsize="10.00", label="Calc_Distance\n2.80%\n(2.80%)\n1640000×"];
+	10 [color="#0d1675", fontcolor="#ffffff", fontsize="10.00", label="clock_gettime\n2.10%\n(2.10%)"];
+	11 [color="#0d1074", fontcolor="#ffffff", fontsize="10.00", label="Calc_Bearing\n0.70%\n(0.70%)\n1650000×"];
+	12 [color="#0d1074", fontcolor="#ffffff", fontsize="10.00", label="atan2l\n0.70%\n(0.70%)"];
+	13 [color="#0d1074", fontcolor="#ffffff", fontsize="10.00", label="strcmp\n0.70%\n(0.70%)"];
+	14 [color="#0d1074", fontcolor="#ffffff", fontsize="10.00", label="__doasin\n0.70%\n(0.70%)"];
+}

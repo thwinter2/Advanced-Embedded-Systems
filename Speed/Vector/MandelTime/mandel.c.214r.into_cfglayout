@@ -1,0 +1,826 @@
+
+;; Function main (main, funcdef_no=11, decl_uid=5884, cgraph_uid=11, symbol_order=11) (executed once)
+
+
+
+try_optimize_cfg iteration 1
+
+Removing jump 94.
+Redirecting fallthru edge 4->5 to 8
+deleting block 5
+Removing jump 177.
+Deleted label in block 8.
+Removing jump 213.
+Redirecting fallthru edge 12->13 to 19
+deleting block 13
+Redirecting fallthru edge 15->16 to 19
+deleting block 16
+Removing jump 303.
+
+
+try_optimize_cfg iteration 2
+
+
+
+try_optimize_cfg iteration 1
+
+(note 71 0 58 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn 58 71 59 2 (set (reg/v:SI 216 [ argc ])
+        (reg:SI 0 r0 [ argc ])) mandel.c:14 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 59 58 60 2 (set (reg/v/f:SI 217 [ argv ])
+        (reg:SI 1 r1 [ argv ])) mandel.c:14 615 {*thumb2_movsi_vfp}
+     (nil))
+(note 60 59 73 2 NOTE_INSN_FUNCTION_BEG)
+(insn 73 60 74 2 (set (reg:SI 218)
+        (reg/f:SI 102 sfp)) mandel.c:19 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 74 73 75 2 (set (reg:SI 220)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:19 4 {*arm_addsi3}
+     (nil))
+(insn 75 74 76 2 (set (reg/f:SI 219)
+        (plus:SI (reg:SI 220)
+            (const_int -24 [0xffffffffffffffe8]))) mandel.c:19 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14424 [0xffffffffffffc7a8]))
+        (nil)))
+(insn 76 75 77 2 (set (reg:SI 222)
+        (unspec:SI [
+                (const:SI (unspec:SI [
+                            (symbol_ref/v/f:SI ("*.LC0") [flags 0x82]  <var_decl 0xb6664160 *.LC0>)
+                            (const:SI (plus:SI (unspec:SI [
+                                            (const_int 8 [0x8])
+                                        ] UNSPEC_PIC_LABEL)
+                                    (const_int 4 [0x4])))
+                        ] UNSPEC_SYMBOL_OFFSET))
+                (const_int 8 [0x8])
+            ] UNSPEC_PIC_UNIFIED)) mandel.c:19 173 {pic_load_addr_unified}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC0") [flags 0x82]  <var_decl 0xb6664160 *.LC0>)
+        (nil)))
+(insn 77 76 78 2 (set (reg/f:SI 221)
+        (reg:SI 222)) mandel.c:19 615 {*thumb2_movsi_vfp}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC0") [flags 0x82]  <var_decl 0xb6664160 *.LC0>)
+        (nil)))
+(insn 78 77 79 2 (set (reg:SI 223)
+        (reg/f:SI 219)) mandel.c:19 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 79 78 80 2 (set (reg:SI 224)
+        (reg/f:SI 221)) mandel.c:19 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 80 79 81 2 (parallel [
+            (set (reg:SI 0 r0)
+                (mem/u/c:SI (reg:SI 224) [0  S4 A32]))
+            (set (reg:SI 1 r1)
+                (mem/u/c:SI (plus:SI (reg:SI 224)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+        ]) mandel.c:19 371 {*ldm2_}
+     (nil))
+(insn 81 80 82 2 (parallel [
+            (set (mem/c:SI (reg:SI 223) [0 cvt+0 S4 A64])
+                (reg:SI 0 r0))
+            (set (mem/c:SI (plus:SI (reg:SI 223)
+                        (const_int 4 [0x4])) [0 cvt+4 S4 A32])
+                (reg:SI 1 r1))
+        ]) mandel.c:19 375 {*stm2_}
+     (nil))
+(insn 82 81 83 2 (set (reg:SI 226)
+        (unspec:SI [
+                (const:SI (unspec:SI [
+                            (symbol_ref/v/f:SI ("*.LC1") [flags 0x82]  <var_decl 0xb668c000 *.LC1>)
+                            (const:SI (plus:SI (unspec:SI [
+                                            (const_int 9 [0x9])
+                                        ] UNSPEC_PIC_LABEL)
+                                    (const_int 4 [0x4])))
+                        ] UNSPEC_SYMBOL_OFFSET))
+                (const_int 9 [0x9])
+            ] UNSPEC_PIC_UNIFIED)) mandel.c:23 173 {pic_load_addr_unified}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC1") [flags 0x82]  <var_decl 0xb668c000 *.LC1>)
+        (nil)))
+(insn 83 82 84 2 (set (reg:SI 225)
+        (reg:SI 226)) mandel.c:23 615 {*thumb2_movsi_vfp}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC1") [flags 0x82]  <var_decl 0xb668c000 *.LC1>)
+        (nil)))
+(insn 84 83 85 2 (set (reg:SI 0 r0)
+        (reg:SI 225)) mandel.c:23 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 85 84 86 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0xb68c4a80 __builtin_puts>) [0 __builtin_puts S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:23 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0xb68c4a80 __builtin_puts>)
+        (nil))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (nil))))
+(insn 86 85 87 2 (set (reg:SI 228)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:25 4 {*arm_addsi3}
+     (nil))
+(insn 87 86 88 2 (set (reg:SI 227)
+        (plus:SI (reg:SI 228)
+            (const_int -16 [0xfffffffffffffff0]))) mandel.c:25 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14416 [0xffffffffffffc7b0]))
+        (nil)))
+(insn 88 87 89 2 (set (reg:SI 1 r1)
+        (reg:SI 227)) mandel.c:25 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 89 88 90 2 (set (reg:SI 0 r0)
+        (const_int 3 [0x3])) mandel.c:25 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 90 89 91 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("clock_gettime") [flags 0x41]  <function_decl 0xb6a5b880 clock_gettime>) [0 clock_gettime S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:25 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("clock_gettime") [flags 0x41]  <function_decl 0xb6a5b880 clock_gettime>)
+        (expr_list:REG_EH_REGION (const_int 0 [0])
+            (nil)))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (expr_list:SI (use (reg:SI 1 r1))
+                (nil)))))
+(debug_insn 91 90 92 2 (var_location:HI y (const_int 0 [0])) mandel.c:26 -1
+     (nil))
+(debug_insn 92 91 93 2 (var_location:HI y (const_int 0 [0])) -1
+     (nil))
+(insn 93 92 68 2 (set (reg:SI 207 [ ivtmp.27 ])
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) 4 {*arm_addsi3}
+     (nil))
+(insn 68 93 69 2 (set (reg:SI 194 [ ivtmp.49 ])
+        (reg:SI 207 [ ivtmp.27 ])) mandel.c:25 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 69 68 189 2 (set (reg:SI 195 [ ivtmp.43 ])
+        (const_int 0 [0])) mandel.c:25 615 {*thumb2_movsi_vfp}
+     (nil))
+(code_label 189 69 96 3 7 "" [1 uses])
+(note 96 189 97 3 [bb 3] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 97 96 98 3 (var_location:HI x (subreg:HI (reg:SI 202 [ ivtmp.36 ]) 0)) -1
+     (nil))
+(debug_insn 98 97 99 3 (var_location:SF zr (const_double:SF 0.0 [0x0.0p+0])) mandel.c:30 -1
+     (nil))
+(debug_insn 99 98 100 3 (var_location:SF zi (const_double:SF 0.0 [0x0.0p+0])) mandel.c:31 -1
+     (nil))
+(debug_insn 100 99 101 3 (var_location:HI D#14 (subreg:HI (reg:SI 202 [ ivtmp.36 ]) 0)) -1
+     (nil))
+(insn 101 100 102 3 (set (reg:SI 230)
+        (sign_extend:SI (subreg:HI (reg:SI 202 [ ivtmp.36 ]) 0))) mandel.c:32 164 {*arm_extendhisi2_v6}
+     (nil))
+(insn 102 101 103 3 (set (reg:DF 229)
+        (float:DF (reg:SI 230))) mandel.c:32 669 {*floatsidf2_vfp}
+     (nil))
+(insn 103 102 104 3 (set (reg:DF 232)
+        (const_double:DF 3.0e+0 [0x0.cp+2])) mandel.c:32 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 104 103 105 3 (set (reg:DF 231)
+        (mult:DF (reg:DF 229)
+            (reg:DF 232))) mandel.c:32 639 {*muldf3_vfp}
+     (nil))
+(insn 105 104 106 3 (set (reg:DF 234)
+        (const_double:DF 6.0e+1 [0x0.fp+6])) mandel.c:32 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 106 105 107 3 (set (reg:DF 233)
+        (div:DF (reg:DF 231)
+            (reg:DF 234))) mandel.c:32 637 {*divdf3_vfp}
+     (nil))
+(insn 107 106 108 3 (set (reg:DF 236)
+        (const_double:DF 2.0e+0 [0x0.8p+2])) mandel.c:32 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 108 107 109 3 (set (reg:DF 235)
+        (minus:DF (reg:DF 233)
+            (reg:DF 236))) mandel.c:32 635 {*subdf3_vfp}
+     (nil))
+(insn 109 108 110 3 (set (reg/v:SF 170 [ cr ])
+        (float_truncate:SF (reg:DF 235))) mandel.c:32 661 {*truncdfsf2_vfp}
+     (nil))
+(debug_insn 110 109 111 3 (var_location:SF cr (reg/v:SF 170 [ cr ])) mandel.c:32 -1
+     (nil))
+(debug_insn 111 110 112 3 (var_location:DF D#5 (float:DF (subreg:HI (reg:SI 195 [ ivtmp.43 ]) 0))) mandel.c:34 -1
+     (nil))
+(debug_insn 112 111 113 3 (var_location:DF D#4 (mult:DF (debug_expr:DF D#5)
+        (const_double:DF -2.0e+0 [-0x0.8p+2]))) mandel.c:34 -1
+     (nil))
+(debug_insn 113 112 114 3 (var_location:DF D#3 (div:DF (debug_expr:DF D#4)
+        (const_double:DF 6.0e+1 [0x0.fp+6]))) mandel.c:34 -1
+     (nil))
+(debug_insn 114 113 115 3 (var_location:DF D#2 (plus:DF (debug_expr:DF D#3)
+        (const_double:DF 1.0e+0 [0x0.8p+1]))) mandel.c:34 -1
+     (nil))
+(debug_insn 115 114 116 3 (var_location:SF D#1 (float_truncate:SF (debug_expr:DF D#2))) mandel.c:34 -1
+     (nil))
+(debug_insn 116 115 117 3 (var_location:SF ci (debug_expr:SF D#1)) mandel.c:34 -1
+     (nil))
+(debug_insn 117 116 118 3 (var_location:SF rsquared (const_double:SF 0.0 [0x0.0p+0])) mandel.c:35 -1
+     (nil))
+(debug_insn 118 117 119 3 (var_location:SF isquared (const_double:SF 0.0 [0x0.0p+0])) mandel.c:36 -1
+     (nil))
+(debug_insn 119 118 120 3 (var_location:HI count (const_int 0 [0])) mandel.c:38 -1
+     (nil))
+(debug_insn 120 119 121 3 (var_location:SF isquared (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 121 120 122 3 (var_location:SF rsquared (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 122 121 123 3 (var_location:SF zi (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 123 122 124 3 (var_location:SF zr (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 124 123 125 3 (var_location:HI count (const_int 0 [0])) -1
+     (nil))
+(debug_insn 125 124 126 3 (var_location:HI x (debug_expr:HI D#14)) -1
+     (nil))
+(debug_insn 126 125 127 3 (var_location:SF cr (reg/v:SF 170 [ cr ])) mandel.c:32 -1
+     (nil))
+(debug_insn 127 126 128 3 (var_location:SF ci (debug_expr:SF D#1)) mandel.c:34 -1
+     (nil))
+(debug_insn 128 127 129 3 (var_location:SF isquared (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 129 128 130 3 (var_location:SF rsquared (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 130 129 131 3 (var_location:SF zi (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 131 130 132 3 (var_location:SF zr (const_double:SF 0.0 [0x0.0p+0])) -1
+     (nil))
+(debug_insn 132 131 63 3 (var_location:HI count (const_int 0 [0])) -1
+     (nil))
+(insn 63 132 64 3 (set (reg/v:SF 178 [ isquared ])
+        (const_double:SF 0.0 [0x0.0p+0])) mandel.c:32 621 {*thumb2_movsf_vfp}
+     (nil))
+(insn 64 63 65 3 (set (reg/v:SF 177 [ rsquared ])
+        (const_double:SF 0.0 [0x0.0p+0])) mandel.c:32 621 {*thumb2_movsf_vfp}
+     (nil))
+(insn 65 64 66 3 (set (reg/v:SF 174 [ zi ])
+        (const_double:SF 0.0 [0x0.0p+0])) mandel.c:32 621 {*thumb2_movsf_vfp}
+     (nil))
+(insn 66 65 67 3 (set (reg/v:SF 176 [ zr ])
+        (const_double:SF 0.0 [0x0.0p+0])) mandel.c:32 621 {*thumb2_movsf_vfp}
+     (nil))
+(insn 67 66 171 3 (set (reg/v:SI 197 [ count ])
+        (const_int 0 [0])) mandel.c:32 615 {*thumb2_movsi_vfp}
+     (nil))
+(code_label 171 67 133 4 5 "" [1 uses])
+(note 133 171 134 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 134 133 135 4 (var_location:SF isquared (reg/v:SF 178 [ isquared ])) -1
+     (nil))
+(debug_insn 135 134 136 4 (var_location:SF rsquared (reg/v:SF 177 [ rsquared ])) -1
+     (nil))
+(debug_insn 136 135 137 4 (var_location:SF zi (reg/v:SF 174 [ zi ])) -1
+     (nil))
+(debug_insn 137 136 138 4 (var_location:SF zr (reg/v:SF 176 [ zr ])) -1
+     (nil))
+(debug_insn 138 137 139 4 (var_location:HI count (subreg:HI (reg/v:SI 197 [ count ]) 0)) -1
+     (nil))
+(insn 139 138 140 4 (set (reg:SF 172 [ _33 ])
+        (mult:SF (reg/v:SF 174 [ zi ])
+            (reg/v:SF 176 [ zr ]))) mandel.c:41 638 {*mulsf3_vfp}
+     (nil))
+(insn 140 139 141 4 (set (reg/v:SF 173 [ zi ])
+        (plus:SF (reg:SF 172 [ _33 ])
+            (reg:SF 172 [ _33 ]))) mandel.c:41 632 {*addsf3_vfp}
+     (nil))
+(debug_insn 141 140 142 4 (var_location:SF zi (reg/v:SF 173 [ zi ])) mandel.c:41 -1
+     (nil))
+(insn 142 141 143 4 (set (reg/v:SF 174 [ zi ])
+        (plus:SF (reg/v:SF 173 [ zi ])
+            (reg:SF 213 [ _161 ]))) mandel.c:42 632 {*addsf3_vfp}
+     (nil))
+(debug_insn 143 142 144 4 (var_location:SF zi (reg/v:SF 174 [ zi ])) mandel.c:42 -1
+     (nil))
+(insn 144 143 145 4 (set (reg/v:SF 175 [ zr ])
+        (minus:SF (reg/v:SF 177 [ rsquared ])
+            (reg/v:SF 178 [ isquared ]))) mandel.c:44 634 {*subsf3_vfp}
+     (nil))
+(debug_insn 145 144 146 4 (var_location:SF zr (reg/v:SF 175 [ zr ])) mandel.c:44 -1
+     (nil))
+(insn 146 145 147 4 (set (reg/v:SF 176 [ zr ])
+        (plus:SF (reg/v:SF 170 [ cr ])
+            (reg/v:SF 175 [ zr ]))) mandel.c:45 632 {*addsf3_vfp}
+     (nil))
+(debug_insn 147 146 148 4 (var_location:SF zr (reg/v:SF 176 [ zr ])) mandel.c:45 -1
+     (nil))
+(insn 148 147 149 4 (set (reg/v:SF 177 [ rsquared ])
+        (mult:SF (reg/v:SF 176 [ zr ])
+            (reg/v:SF 176 [ zr ]))) mandel.c:47 638 {*mulsf3_vfp}
+     (nil))
+(debug_insn 149 148 150 4 (var_location:SF rsquared (reg/v:SF 177 [ rsquared ])) mandel.c:47 -1
+     (nil))
+(insn 150 149 151 4 (set (reg/v:SF 178 [ isquared ])
+        (mult:SF (reg/v:SF 174 [ zi ])
+            (reg/v:SF 174 [ zi ]))) mandel.c:48 638 {*mulsf3_vfp}
+     (nil))
+(debug_insn 151 150 152 4 (var_location:SF isquared (reg/v:SF 178 [ isquared ])) mandel.c:48 -1
+     (nil))
+(insn 152 151 153 4 (set (reg:HI 237)
+        (subreg/u:HI (reg/v:SI 197 [ count ]) 0)) 796 {*thumb2_movhi_insn}
+     (nil))
+(insn 153 152 154 4 (set (reg:SI 238)
+        (plus:SI (subreg:SI (reg:HI 237) 0)
+            (const_int 1 [0x1]))) 4 {*arm_addsi3}
+     (nil))
+(insn 154 153 155 4 (set (reg:SI 203 [ _125 ])
+        (zero_extend:SI (subreg:HI (reg:SI 238) 0))) 819 {*thumb2_zero_extendhisi2_v6}
+     (nil))
+(insn 155 154 156 4 (set (reg/v:SI 197 [ count ])
+        (sign_extend:SI (subreg/v:HI (reg:SI 203 [ _125 ]) 0))) 164 {*arm_extendhisi2_v6}
+     (nil))
+(debug_insn 156 155 157 4 (var_location:HI count (subreg:HI (reg/v:SI 197 [ count ]) 0)) mandel.c:39 -1
+     (nil))
+(debug_insn 157 156 158 4 (var_location:SF isquared (reg/v:SF 178 [ isquared ])) -1
+     (nil))
+(debug_insn 158 157 159 4 (var_location:SF rsquared (reg/v:SF 177 [ rsquared ])) -1
+     (nil))
+(debug_insn 159 158 160 4 (var_location:SF zi (reg/v:SF 174 [ zi ])) -1
+     (nil))
+(debug_insn 160 159 161 4 (var_location:SF zr (reg/v:SF 176 [ zr ])) -1
+     (nil))
+(debug_insn 161 160 162 4 (var_location:HI count (subreg:HI (reg/v:SI 197 [ count ]) 0)) -1
+     (nil))
+(insn 162 161 163 4 (set (reg:SF 239)
+        (plus:SF (reg/v:SF 177 [ rsquared ])
+            (reg/v:SF 178 [ isquared ]))) mandel.c:38 632 {*addsf3_vfp}
+     (nil))
+(insn 163 162 164 4 (set (reg:SF 240)
+        (const_double:SF 4.0e+0 [0x0.8p+3])) mandel.c:38 621 {*thumb2_movsf_vfp}
+     (nil))
+(insn 164 163 165 4 (set (reg:CCFPE 100 cc)
+        (compare:CCFPE (reg:SF 239)
+            (reg:SF 240))) mandel.c:38 676 {*cmpsf_trap_split_vfp}
+     (nil))
+(jump_insn 165 164 316 4 (set (pc)
+        (if_then_else (le (reg:CCFPE 100 cc)
+                (const_int 0 [0]))
+            (label_ref:SI 316)
+            (pc))) mandel.c:38 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 9550 (nil))
+ -> 316)
+(code_label 316 165 169 6 13 "" [1 uses])
+(note 169 316 170 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 170 169 172 6 (set (reg/v:SI 197 [ count ])
+        (reg/v:SI 197 [ count ])) 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 172 170 173 6 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 203 [ _125 ])
+            (const_int 200 [0xc8]))) mandel.c:39 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 173 172 174 6 (set (pc)
+        (if_then_else (ne (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 171)
+            (pc))) mandel.c:39 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 9900 (nil))
+ -> 171)
+(note 174 173 175 7 [bb 7] NOTE_INSN_BASIC_BLOCK)
+(insn 175 174 176 7 (set (reg:SI 241)
+        (const_int 0 [0])) mandel.c:52 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 176 175 180 7 (set (mem:SI (reg:SI 201 [ ivtmp.42 ]) [1 MEM[base: _103, offset: 0B]+0 S4 A32])
+        (reg:SI 241)) mandel.c:52 615 {*thumb2_movsi_vfp}
+     (nil))
+(note 180 176 181 8 [bb 8] NOTE_INSN_BASIC_BLOCK)
+(insn 181 180 182 8 (set (mem:SI (reg:SI 201 [ ivtmp.42 ]) [1 MEM[base: _115, offset: 0B]+0 S4 A32])
+        (reg/v:SI 197 [ count ])) mandel.c:54 615 {*thumb2_movsi_vfp}
+     (nil))
+(code_label 182 181 183 9 6 "" [0 uses])
+(note 183 182 184 9 [bb 9] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 184 183 185 9 (var_location:HI D#12 (plus:HI (subreg:HI (reg:SI 202 [ ivtmp.36 ]) 0)
+        (const_int 1 [0x1]))) -1
+     (nil))
+(debug_insn 185 184 186 9 (var_location:HI x (debug_expr:HI D#12)) mandel.c:28 -1
+     (nil))
+(debug_insn 186 185 187 9 (var_location:HI x (debug_expr:HI D#12)) -1
+     (nil))
+(insn 187 186 188 9 (set (reg:SI 202 [ ivtmp.36 ])
+        (plus:SI (reg:SI 202 [ ivtmp.36 ])
+            (const_int 1 [0x1]))) 4 {*arm_addsi3}
+     (nil))
+(insn 188 187 190 9 (set (reg:SI 201 [ ivtmp.42 ])
+        (plus:SI (reg:SI 201 [ ivtmp.42 ])
+            (const_int 240 [0xf0]))) 4 {*arm_addsi3}
+     (nil))
+(insn 190 188 191 9 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 202 [ ivtmp.36 ])
+            (const_int 60 [0x3c]))) mandel.c:28 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 191 190 192 9 (set (pc)
+        (if_then_else (ne (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 189)
+            (pc))) mandel.c:28 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 9833 (nil))
+ -> 189)
+(note 192 191 193 10 [bb 10] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 193 192 194 10 (var_location:HI D#13 (plus:HI (subreg:HI (reg:SI 195 [ ivtmp.43 ]) 0)
+        (const_int 1 [0x1]))) -1
+     (nil))
+(debug_insn 194 193 195 10 (var_location:HI y (debug_expr:HI D#13)) mandel.c:26 -1
+     (nil))
+(debug_insn 195 194 196 10 (var_location:HI y (debug_expr:HI D#13)) -1
+     (nil))
+(insn 196 195 197 10 (set (reg:SI 195 [ ivtmp.43 ])
+        (plus:SI (reg:SI 195 [ ivtmp.43 ])
+            (const_int 1 [0x1]))) 4 {*arm_addsi3}
+     (nil))
+(insn 197 196 198 10 (set (reg:SI 194 [ ivtmp.49 ])
+        (plus:SI (reg:SI 194 [ ivtmp.49 ])
+            (const_int 4 [0x4]))) 4 {*arm_addsi3}
+     (nil))
+(insn 198 197 199 10 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 195 [ ivtmp.43 ])
+            (const_int 60 [0x3c]))) mandel.c:26 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 199 198 200 10 (set (pc)
+        (if_then_else (eq (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 215)
+            (pc))) mandel.c:26 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 164 (nil))
+ -> 215)
+(code_label 200 199 201 11 2 "" [0 uses])
+(note 201 200 202 11 [bb 11] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 202 201 203 11 (var_location:HI y (subreg:HI (reg:SI 195 [ ivtmp.43 ]) 0)) -1
+     (nil))
+(debug_insn 203 202 204 11 (var_location:HI x (const_int 0 [0])) -1
+     (nil))
+(insn 204 203 205 11 (set (reg:SI 243)
+        (sign_extend:SI (subreg:HI (reg:SI 195 [ ivtmp.43 ]) 0))) 164 {*arm_extendhisi2_v6}
+     (nil))
+(insn 205 204 206 11 (set (reg:DF 242)
+        (float:DF (reg:SI 243))) 669 {*floatsidf2_vfp}
+     (nil))
+(insn 206 205 207 11 (set (reg:DF 245)
+        (const_double:DF -2.0e+0 [-0x0.8p+2])) 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 207 206 208 11 (set (reg:DF 244)
+        (mult:DF (reg:DF 242)
+            (reg:DF 245))) 639 {*muldf3_vfp}
+     (nil))
+(insn 208 207 209 11 (set (reg:DF 247)
+        (const_double:DF 6.0e+1 [0x0.fp+6])) 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 209 208 210 11 (set (reg:DF 246)
+        (div:DF (reg:DF 244)
+            (reg:DF 247))) 637 {*divdf3_vfp}
+     (nil))
+(insn 210 209 211 11 (set (reg:DF 249)
+        (const_double:DF 1.0e+0 [0x0.8p+1])) 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 211 210 212 11 (set (reg:DF 248)
+        (plus:DF (reg:DF 246)
+            (reg:DF 249))) 633 {*adddf3_vfp}
+     (nil))
+(insn 212 211 61 11 (set (reg:SF 213 [ _161 ])
+        (float_truncate:SF (reg:DF 248))) 661 {*truncdfsf2_vfp}
+     (nil))
+(insn 61 212 62 11 (set (reg:SI 201 [ ivtmp.42 ])
+        (reg:SI 194 [ ivtmp.49 ])) mandel.c:14 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 62 61 215 11 (set (reg:SI 202 [ ivtmp.36 ])
+        (const_int 0 [0])) mandel.c:14 615 {*thumb2_movsi_vfp}
+     (nil))
+(code_label 215 62 216 12 8 "" [1 uses])
+(note 216 215 217 12 [bb 12] NOTE_INSN_BASIC_BLOCK)
+(insn 217 216 218 12 (set (reg:SI 251)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:58 4 {*arm_addsi3}
+     (nil))
+(insn 218 217 219 12 (set (reg:SI 250)
+        (plus:SI (reg:SI 251)
+            (const_int -8 [0xfffffffffffffff8]))) mandel.c:58 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14408 [0xffffffffffffc7b8]))
+        (nil)))
+(insn 219 218 220 12 (set (reg:SI 1 r1)
+        (reg:SI 250)) mandel.c:58 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 220 219 221 12 (set (reg:SI 0 r0)
+        (const_int 3 [0x3])) mandel.c:58 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 221 220 222 12 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("clock_gettime") [flags 0x41]  <function_decl 0xb6a5b880 clock_gettime>) [0 clock_gettime S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:58 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("clock_gettime") [flags 0x41]  <function_decl 0xb6a5b880 clock_gettime>)
+        (expr_list:REG_EH_REGION (const_int 0 [0])
+            (nil)))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (expr_list:SI (use (reg:SI 1 r1))
+                (nil)))))
+(insn 222 221 223 12 (set (reg:SI 252)
+        (reg/f:SI 102 sfp)) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 223 222 224 12 (set (reg:SI 254)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:60 4 {*arm_addsi3}
+     (nil))
+(insn 224 223 225 12 (set (reg/f:SI 253)
+        (plus:SI (reg:SI 254)
+            (const_int -8 [0xfffffffffffffff8]))) mandel.c:60 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14408 [0xffffffffffffc7b8]))
+        (nil)))
+(insn 225 224 226 12 (set (reg:SI 255)
+        (reg/f:SI 102 sfp)) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 226 225 227 12 (set (reg:SI 257)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:60 4 {*arm_addsi3}
+     (nil))
+(insn 227 226 228 12 (set (reg/f:SI 256)
+        (plus:SI (reg:SI 257)
+            (const_int -16 [0xfffffffffffffff0]))) mandel.c:60 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14416 [0xffffffffffffc7b0]))
+        (nil)))
+(insn 228 227 229 12 (set (reg:SI 259)
+        (mem/c:SI (reg/f:SI 253) [3 t2.tv_sec+0 S4 A64])) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 229 228 230 12 (set (reg:SI 260)
+        (mem/c:SI (reg/f:SI 256) [3 t1.tv_sec+0 S4 A64])) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 230 229 231 12 (set (reg:SI 258)
+        (minus:SI (reg:SI 259)
+            (reg:SI 260))) mandel.c:60 33 {*arm_subsi3_insn}
+     (nil))
+(insn 231 230 232 12 (set (reg:SI 262)
+        (const_int 1000000 [0xf4240])) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 232 231 233 12 (set (reg:SI 261)
+        (mult:SI (reg:SI 262)
+            (reg:SI 258))) mandel.c:60 37 {*arm_mulsi3_v6}
+     (nil))
+(insn 233 232 234 12 (set (reg:SI 263)
+        (reg/f:SI 102 sfp)) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 234 233 235 12 (set (reg:SI 265)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:60 4 {*arm_addsi3}
+     (nil))
+(insn 235 234 236 12 (set (reg/f:SI 264)
+        (plus:SI (reg:SI 265)
+            (const_int -8 [0xfffffffffffffff8]))) mandel.c:60 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14408 [0xffffffffffffc7b8]))
+        (nil)))
+(insn 236 235 237 12 (set (reg:SI 266)
+        (reg/f:SI 102 sfp)) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 237 236 238 12 (set (reg:SI 268)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:60 4 {*arm_addsi3}
+     (nil))
+(insn 238 237 239 12 (set (reg/f:SI 267)
+        (plus:SI (reg:SI 268)
+            (const_int -16 [0xfffffffffffffff0]))) mandel.c:60 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14416 [0xffffffffffffc7b0]))
+        (nil)))
+(insn 239 238 240 12 (set (reg:SI 270)
+        (mem/c:SI (plus:SI (reg/f:SI 264)
+                (const_int 4 [0x4])) [3 t2.tv_nsec+0 S4 A32])) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 240 239 241 12 (set (reg:SI 271)
+        (mem/c:SI (plus:SI (reg/f:SI 267)
+                (const_int 4 [0x4])) [3 t1.tv_nsec+0 S4 A32])) mandel.c:60 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 241 240 242 12 (set (reg:SI 269)
+        (minus:SI (reg:SI 270)
+            (reg:SI 271))) mandel.c:60 33 {*arm_subsi3_insn}
+     (nil))
+(insn 242 241 243 12 (set (reg/v:SI 187 [ t ])
+        (plus:SI (reg:SI 261)
+            (reg:SI 269))) mandel.c:60 4 {*arm_addsi3}
+     (nil))
+(debug_insn 243 242 244 12 (var_location:SI t (reg/v:SI 187 [ t ])) mandel.c:60 -1
+     (nil))
+(insn 244 243 245 12 (set (reg:DF 272)
+        (float:DF (reg/v:SI 187 [ t ]))) mandel.c:62 669 {*floatsidf2_vfp}
+     (nil))
+(insn 245 244 246 12 (set (reg:DF 274)
+        (const_double:DF 1.0e+6 [0x0.f424p+20])) mandel.c:62 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 246 245 247 12 (set (reg:DF 273)
+        (div:DF (reg:DF 272)
+            (reg:DF 274))) mandel.c:62 637 {*divdf3_vfp}
+     (nil))
+(insn 247 246 248 12 (set (reg:SI 276)
+        (unspec:SI [
+                (const:SI (unspec:SI [
+                            (symbol_ref/v/f:SI ("*.LC2") [flags 0x82]  <var_decl 0xb668c058 *.LC2>)
+                            (const:SI (plus:SI (unspec:SI [
+                                            (const_int 10 [0xa])
+                                        ] UNSPEC_PIC_LABEL)
+                                    (const_int 4 [0x4])))
+                        ] UNSPEC_SYMBOL_OFFSET))
+                (const_int 10 [0xa])
+            ] UNSPEC_PIC_UNIFIED)) mandel.c:62 173 {pic_load_addr_unified}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC2") [flags 0x82]  <var_decl 0xb668c058 *.LC2>)
+        (nil)))
+(insn 248 247 249 12 (set (reg:SI 275)
+        (reg:SI 276)) mandel.c:62 615 {*thumb2_movsi_vfp}
+     (expr_list:REG_EQUAL (symbol_ref/v/f:SI ("*.LC2") [flags 0x82]  <var_decl 0xb668c058 *.LC2>)
+        (nil)))
+(insn 249 248 250 12 (set (reg:DF 2 r2)
+        (reg:DF 273)) mandel.c:62 623 {*thumb2_movdf_vfp}
+     (nil))
+(insn 250 249 251 12 (set (reg:SI 1 r1)
+        (reg/v:SI 187 [ t ])) mandel.c:62 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 251 250 252 12 (set (reg:SI 0 r0)
+        (reg:SI 275)) mandel.c:62 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 252 251 253 12 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0xb68c4700 printf>) [0 __builtin_printf S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:62 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0xb68c4700 printf>)
+        (nil))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (expr_list:SI (use (reg:SI 1 r1))
+                (expr_list:DF (use (reg:DF 2 r2))
+                    (nil))))))
+(insn 253 252 254 12 (set (reg:CC 100 cc)
+        (compare:CC (reg/v:SI 216 [ argc ])
+            (const_int 1 [0x1]))) mandel.c:64 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 254 253 278 12 (set (pc)
+        (if_then_else (gt (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 294)
+            (pc))) mandel.c:64 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 8088 (nil))
+ -> 294)
+(code_label 278 254 258 14 11 "" [1 uses])
+(note 258 278 259 14 [bb 14] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 259 258 260 14 (var_location:HI x (clobber (const_int 0 [0]))) -1
+     (nil))
+(insn 260 259 261 14 (set (reg:SI 277)
+        (reg/f:SI 102 sfp)) mandel.c:69 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 261 260 262 14 (set (reg:SI 279)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) mandel.c:69 4 {*arm_addsi3}
+     (nil))
+(insn 262 261 263 14 (set (reg/f:SI 278)
+        (plus:SI (reg:SI 279)
+            (const_int -24 [0xffffffffffffffe8]))) mandel.c:69 4 {*arm_addsi3}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14424 [0xffffffffffffc7a8]))
+        (nil)))
+(insn 263 262 264 14 (set (reg:SI 281)
+        (mem:SI (reg:SI 214 [ ivtmp.19 ]) [1 MEM[base: _138, offset: 0B]+0 S4 A32])) mandel.c:69 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 264 263 265 14 (set (reg:SI 283)
+        (const_int 613566757 [0x24924925])) mandel.c:69 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 265 264 266 14 (set (reg:DI 282)
+        (mult:DI (zero_extend:DI (reg:SI 281))
+            (zero_extend:DI (reg:SI 283)))) mandel.c:69 54 {*umulsidi3_v6}
+     (nil))
+(insn 266 265 267 14 (set (reg:SI 284)
+        (minus:SI (reg:SI 281)
+            (subreg:SI (reg:DI 282) 4))) mandel.c:69 33 {*arm_subsi3_insn}
+     (nil))
+(insn 267 266 268 14 (set (reg:SI 285)
+        (lshiftrt:SI (reg:SI 284)
+            (const_int 1 [0x1]))) mandel.c:69 124 {*arm_shiftsi3}
+     (nil))
+(insn 268 267 269 14 (set (reg:SI 286)
+        (plus:SI (reg:SI 285)
+            (subreg:SI (reg:DI 282) 4))) mandel.c:69 4 {*arm_addsi3}
+     (nil))
+(insn 269 268 270 14 (set (reg:SI 280)
+        (lshiftrt:SI (reg:SI 286)
+            (const_int 2 [0x2]))) mandel.c:69 124 {*arm_shiftsi3}
+     (expr_list:REG_EQUAL (udiv:SI (reg:SI 281)
+            (const_int 7 [0x7]))
+        (nil)))
+(insn 270 269 271 14 (set (reg:SI 287)
+        (zero_extend:SI (mem/j:QI (plus:SI (reg/f:SI 278)
+                    (reg:SI 280)) [0 cvt S1 A8]))) mandel.c:69 820 {thumb2_zero_extendqisi2_v6}
+     (nil))
+(insn 271 270 272 14 (set (reg:SI 0 r0)
+        (reg:SI 287)) mandel.c:69 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 272 271 273 14 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("putchar") [flags 0x41]  <function_decl 0xb68c4880 __builtin_putchar>) [0 __builtin_putchar S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:69 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("putchar") [flags 0x41]  <function_decl 0xb68c4880 __builtin_putchar>)
+        (nil))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (nil))))
+(debug_insn 273 272 274 14 (var_location:HI D#7 (plus:HI (debug_expr:HI D#8)
+        (const_int 1 [0x1]))) mandel.c:67 -1
+     (nil))
+(debug_insn 274 273 275 14 (var_location:HI D#6 (debug_expr:HI D#7)) mandel.c:67 -1
+     (nil))
+(debug_insn 275 274 276 14 (var_location:HI x (debug_expr:HI D#6)) mandel.c:67 -1
+     (nil))
+(debug_insn 276 275 277 14 (var_location:HI x (debug_expr:HI D#6)) -1
+     (nil))
+(insn 277 276 279 14 (set (reg:SI 214 [ ivtmp.19 ])
+        (plus:SI (reg:SI 214 [ ivtmp.19 ])
+            (const_int 240 [0xf0]))) 4 {*arm_addsi3}
+     (nil))
+(insn 279 277 280 14 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 205 [ _127 ])
+            (reg:SI 214 [ ivtmp.19 ]))) mandel.c:67 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 280 279 281 14 (set (pc)
+        (if_then_else (ne (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 278)
+            (pc))) mandel.c:67 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 9833 (nil))
+ -> 278)
+(note 281 280 282 15 [bb 15] NOTE_INSN_BASIC_BLOCK)
+(insn 282 281 283 15 (set (reg:SI 0 r0)
+        (const_int 10 [0xa])) mandel.c:71 615 {*thumb2_movsi_vfp}
+     (nil))
+(call_insn 283 282 284 15 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("putchar") [flags 0x41]  <function_decl 0xb68c4880 __builtin_putchar>) [0 __builtin_putchar S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) mandel.c:71 209 {*call_value_symbol}
+     (expr_list:REG_CALL_DECL (symbol_ref:SI ("putchar") [flags 0x41]  <function_decl 0xb68c4880 __builtin_putchar>)
+        (nil))
+    (expr_list (clobber (reg:SI 12 ip))
+        (expr_list:SI (use (reg:SI 0 r0))
+            (nil))))
+(debug_insn 284 283 285 15 (var_location:HI D#10 (plus:HI (debug_expr:HI D#11)
+        (const_int 1 [0x1]))) mandel.c:65 -1
+     (nil))
+(debug_insn 285 284 286 15 (var_location:HI D#9 (debug_expr:HI D#10)) mandel.c:65 -1
+     (nil))
+(debug_insn 286 285 287 15 (var_location:HI y (debug_expr:HI D#9)) mandel.c:65 -1
+     (nil))
+(debug_insn 287 286 288 15 (var_location:HI y (debug_expr:HI D#9)) -1
+     (nil))
+(insn 288 287 289 15 (set (reg:SI 207 [ ivtmp.27 ])
+        (plus:SI (reg:SI 207 [ ivtmp.27 ])
+            (const_int 4 [0x4]))) 4 {*arm_addsi3}
+     (nil))
+(insn 289 288 290 15 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 206 [ _128 ])
+            (reg:SI 207 [ ivtmp.27 ]))) mandel.c:65 186 {*arm_cmpsi_insn}
+     (nil))
+(jump_insn 290 289 294 15 (set (pc)
+        (if_then_else (ne (reg:CC 100 cc)
+                (const_int 0 [0]))
+            (label_ref 298)
+            (pc))) mandel.c:65 194 {arm_cond_branch}
+     (int_list:REG_BR_PROB 9836 (nil))
+ -> 298)
+(code_label 294 290 295 17 9 "" [1 uses])
+(note 295 294 296 17 [bb 17] NOTE_INSN_BASIC_BLOCK)
+(insn 296 295 297 17 (set (reg:SI 288)
+        (plus:SI (reg/f:SI 102 sfp)
+            (const_int -14400 [0xffffffffffffc7c0]))) 4 {*arm_addsi3}
+     (nil))
+(insn 297 296 298 17 (set (reg:SI 206 [ _128 ])
+        (plus:SI (reg:SI 288)
+            (const_int 240 [0xf0]))) 4 {*arm_addsi3}
+     (nil))
+(code_label 298 297 299 18 12 "" [1 uses])
+(note 299 298 300 18 [bb 18] NOTE_INSN_BASIC_BLOCK)
+(debug_insn 300 299 301 18 (var_location:HI y (clobber (const_int 0 [0]))) -1
+     (nil))
+(debug_insn 301 300 302 18 (var_location:HI x (const_int 0 [0])) -1
+     (nil))
+(insn 302 301 70 18 (set (reg:SI 205 [ _127 ])
+        (plus:SI (reg:SI 207 [ ivtmp.27 ])
+            (const_int 14400 [0x3840]))) 4 {*arm_addsi3}
+     (nil))
+(insn 70 302 305 18 (set (reg:SI 214 [ ivtmp.19 ])
+        (reg:SI 207 [ ivtmp.27 ])) mandel.c:25 615 {*thumb2_movsi_vfp}
+     (nil))
+(code_label 305 70 306 19 10 "" [0 uses])
+(note 306 305 307 19 [bb 19] NOTE_INSN_BASIC_BLOCK)
+(insn 307 306 311 19 (set (reg:SI 215 [ <retval> ])
+        (const_int 0 [0])) 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 311 307 312 19 (set (reg/i:SI 0 r0)
+        (reg:SI 215 [ <retval> ])) mandel.c:75 615 {*thumb2_movsi_vfp}
+     (nil))
+(insn 312 311 0 19 (use (reg/i:SI 0 r0)) mandel.c:75 -1
+     (nil))
