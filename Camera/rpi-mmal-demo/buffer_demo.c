@@ -16,6 +16,8 @@
 #include "interface/mmal/util/mmal_default_components.h"
 #include "interface/mmal/util/mmal_connection.h"
 
+#include <sched.h>
+
 #define MMAL_CAMERA_PREVIEW_PORT 0
 #define MMAL_CAMERA_VIDEO_PORT 1
 #define MMAL_CAMERA_CAPTURE_PORT 2
@@ -24,13 +26,13 @@ MMAL_POOL_T *camera_video_port_pool;
 MMAL_POOL_T *preview_input_port_pool;
 MMAL_PORT_T *preview_input_port = NULL;
 
+#define MY_RT_PRIORITY 50 // MAX_USER_RT_PRIO /* Highest possible */
 
 #define W_INVERT 300
 #define H_INVERT 300
 
 static void preview_buffer_callback(MMAL_PORT_T *port, MMAL_BUFFER_HEADER_T *buffer) {
-  //printf("INFO:preview_buffer_callback buffer->length = %d\n", buffer->length);
-    
+  //printf("INFO:preview_buffer_callback buffer->length = %d\n", buffer->length);  
   mmal_buffer_header_release(buffer);
 }
 
@@ -146,13 +148,27 @@ int main(int argc, char** argv) {
     MMAL_STATUS_T status;
     MMAL_PORT_T *camera_preview_port = NULL, *camera_video_port = NULL, *camera_still_port = NULL;
 
-
-
     MMAL_CONNECTION_T *camera_preview_connection = 0;
 
+    int rc, old_scheduler_policy;
+    struct sched_param my_params;
+    
     printf("Running...\n");
 
-
+#if 0    // Does not work - locks up program
+    printf("Raising priority\n");
+    /* Passing zero specifies caller's (our) policy */
+    old_scheduler_policy = sched_getscheduler(0);
+    my_params.sched_priority = MY_RT_PRIORITY;
+    /* Passing zero specifies callers (our) pid */
+    rc = sched_setscheduler(0, SCHED_RR, &my_params);
+    if ( rc == -1 ) {
+      printf("failed.\n");
+      return -1;
+    } else
+      printf("succeeded.\n");
+#endif
+    
     bcm_host_init();
 
     status = mmal_component_create(MMAL_COMPONENT_DEFAULT_CAMERA, &camera);
