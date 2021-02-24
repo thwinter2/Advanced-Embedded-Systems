@@ -38,7 +38,7 @@ int main(int argc, char * argv []) {
   gpio = (uint32_t *) mmap(0, getpagesize(), PROT_READ|PROT_WRITE,
 			   MAP_SHARED, fd, GPIO_BASE);
 
-  if (((int32_t) gpio) == MAP_FAILED) {
+  if (((void *) gpio) == MAP_FAILED) {
     printf("Memory mapping failed: %s [%d, 0x%x]\n", strerror(errno), errno,
 	   (int32_t)gpio);
     return -EBUSY;
