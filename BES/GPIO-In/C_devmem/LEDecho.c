@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <signal.h>	// Defines signal-handling functions (i.e. trap Ctrl-C)
 
 // Modified version to test speed of output changes
 // Can pass integer argument to set toggle delay
@@ -21,6 +22,17 @@ int32_t tog_delay = TOG_DELAY;
 #define GPCLR0       0x28
 #define GPLVL0       0x34
 static volatile uint32_t *gpio;   // pointer to the gpio (*int)
+
+int run = 1;
+
+// Signal handler callback function to gracefully exit (releasing GPIO mmap) when SIGINT (from Ctrl-C) is received
+// void signal_handler(int sig);
+
+void signal_handler(int sig)
+{
+  printf( "\nCtrl-C pressed, cleaning up and exiting.\n" );
+  run = 0;
+}
 
 int main(int argc, char * argv []) {
   int fd;
@@ -38,7 +50,7 @@ int main(int argc, char * argv []) {
   gpio = (uint32_t *) mmap(0, getpagesize(), PROT_READ|PROT_WRITE,
 			   MAP_SHARED, fd, GPIO_BASE);
 
-  if (((int32_t) gpio) == MAP_FAILED) {
+  if (((void *) gpio) == MAP_FAILED) {
     printf("Memory mapping failed: %s [%d, 0x%x]\n", strerror(errno), errno,
 	   (int32_t)gpio);
     return -EBUSY;
@@ -51,6 +63,9 @@ int main(int argc, char * argv []) {
       printf("Bad argument: %s\n", argv[1]);
     }
   }
+
+  // Set the signal callback for Ctrl-C
+  signal(SIGINT, signal_handler);
 
   // at this point gpio points to the GPIO peripheral base address
 
@@ -66,7 +81,7 @@ int main(int argc, char * argv []) {
   *(gpio + 2) = (*(gpio + 2) & ~(7 << 21) | (0 << 21));
   // writing the 000 is not necessary but is there for clarity
 
-  while (1) {
+  while (run) {
     level_in = (*(gpio+(GPLVL0/4))) & (1<<27); // get bit 27
     if (level_in)
       *(gpio + (GPSET0/4)) = 1 << 17;  // Turn the LED on
