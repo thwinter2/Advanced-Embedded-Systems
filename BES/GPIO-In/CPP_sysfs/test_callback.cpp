@@ -14,8 +14,7 @@ int activateLED(int var){
 #else // flash the LED
   outGPIO->streamWrite((GPIO_VALUE) 1);
   outGPIO->streamWrite((GPIO_VALUE) 0);
-#endif  
-  cout << "Button Pressed" << endl;
+#endif
   return 0;
 }
 

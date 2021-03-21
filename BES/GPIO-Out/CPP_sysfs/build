@@ -1,4 +1,4 @@
 #!/bin/bash
-g++ simple.cpp GPIO.cpp -o simple -pthread
+g++ simple.cpp GPIO.cpp -o simple -pthread -O3
 g++ simple_out.cpp GPIO.cpp -o simple_out -pthread
 
