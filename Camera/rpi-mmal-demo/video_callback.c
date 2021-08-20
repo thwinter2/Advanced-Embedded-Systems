@@ -16,9 +16,24 @@
 #include "is_options.h"
 #include "yuv.h"
 
+
 #include "PCA9685_servo_driver.h"
 
 unsigned char img2_bitplanes[1280*720*3/2];
+
+void enable_runfast() {
+  static const unsigned int x = 0x04086060;
+  static const unsigned int y = 0x03000000;
+  int r;
+  asm volatile (
+		"fmrx %0, fpscr \n\t" //r0 = FPSCR
+		"and %0, %0, %1 \n\t" //r0 = r0 & 0x04086060
+		"orr %0, %0, %2 \n\t" //r0 = r0 | 0x03000000
+		"fmxr fpscr, %0 \n\t" //FPSCR = r0
+		: "=r"(r)
+		: "r"(x), "r"(y)
+		);
+}
 
 void draw_overlay_info(YUV_IMAGE_T * i) {
   Draw_Circle(i, i->half_w, i->half_h, 10, &black, 0);
@@ -36,42 +51,35 @@ void clear_term_screen(void) {
 int find_chroma_matches(YUV_IMAGE_T * i, YUV_T * tc, int * rcx, int * rcy, int sep){
   int x, y;
   int matches=0;
-  unsigned int min_x=0xffffffff, max_x=0, min_y=0xffffffff, max_y=0;
-  int offsetX=0, offsetY=0;
   YUV_T color;
   int cx=0, cy=0;
+  int half_sep = sep/2;
+  int half_px_py, du, dv;
   
-  for (y = sep/2; y <= i->h - sep/2; y += sep) { 
-    for (x = sep/2; x <= i->w - sep/2; x += sep) {
-      Get_Pixel_yuv(i, x,y, & color);
+  for (y = half_sep; y <= i->h - half_sep; y += sep) { 
+    for (x = half_sep; x <= i->w - half_sep; x += sep) {
+      //Get_Pixel_yuv(i, x,y, & color);
+      half_px_py = (x/2 + (y/2*i->half_w));
+      color.y = i->bY[x + y*i->w];
+      color.u = i->bU[half_px_py];
+      color.v = i->bV[half_px_py];
       // Identify pixels with right color
-      int diff = Sq_UV_Difference_yuv(&color, tc);
-      if (diff < color_threshold) {
-	cx += x;
-	cy += y;
-	min_x = MIN(min_x, x);
-	max_x = MAX(max_x, x);
-	min_y = MIN(min_y, y);
-	max_y = MAX(max_y, y);
+      du = (int) color.u - tc->u;
+      dv = (int) color.v - tc->v;
+      //int diff = Sq_UV_Difference_yuv(&color, tc);
+      if (color_threshold > (du*du + dv*dv)) {
+        cx += x;
+        cy += y;
 
-	matches++;
-	if (sep > 10)
-	  Draw_Rectangle(i, x, y, sep-2, sep-2, &pink, 0);
-	else {
-	  Draw_Line(i, x-sep/2, y, x+sep/2, y, &pink);
-	  Draw_Line(i, x, y-sep/2, x, y+sep/2, &pink);
-	}
+        matches++;
+        //Draw_Line(i, x-half_sep, y, x+half_sep, y, &pink);
+        Draw_Line(i, x, y-half_sep, x, y+half_sep, &pink);
       }
     }
   }
   if (matches > 0) {
-#if 1
     cx /= matches;
     cy /= matches;
-#else
-    cx = (max_x+min_x)/2;
-    cy = (max_y+min_y)/2;
-#endif
   }
   *rcx = cx;
   *rcy = cy;
@@ -88,6 +96,9 @@ void video_buffer_callback(MMAL_PORT_T *port, MMAL_BUFFER_HEADER_T *buffer) {
   static YUV_IMAGE_T img, img2;
   int translate_image = 0;
   int w=1280, h=720;
+  
+  enable_runfast();
+  
   // Default target color 
   static YUV_T target = {128, 135, 64};   // Green paper
   

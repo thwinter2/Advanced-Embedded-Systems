@@ -1,8 +1,13 @@
 #include "yuv.h"
 #include <stdint.h>
 #include "is_options.h"
+#include <arm_neon.h>
+
+
 
 // #define BLANK_EDGES
+
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 YUV_T black={0, 128, 128}, white={255, 128, 128}, green={128, 135, 64},
   orange={128, 101, 192}, blue={128, 90, 158}, pink={180, 200, 200};
@@ -25,24 +30,24 @@ void YUV_Image_Info(YUV_IMAGE_T * i) {
 }
 
 void Set_Pixel(YUV_IMAGE_T * i, int px, int py, uint8_t lum, uint8_t u, uint8_t v){
-  int half_px = px/2, half_py = py/2;
+  int half_px_py = (px/2 + (py/2*i->half_w));
   i->bY[px + py*i->w] = lum;
-  i->bU[half_px+half_py*i->half_w] = u;
-  i->bV[half_px+half_py*i->half_w] = v;
+  i->bU[half_px_py] = u;
+  i->bV[half_px_py] = v;
 }
 
 void Set_Pixel_yuv(YUV_IMAGE_T * i, int px, int py, YUV_T * yuv) {
-  int half_px = px/2, half_py = py/2;
+  int half_px_py = (px/2 + (py/2*i->half_w));
   i->bY[px + py*i->w] = yuv->y;
-  i->bU[half_px+half_py*i->half_w] = yuv->u;
-  i->bV[half_px+half_py*i->half_w] = yuv->v;
+  i->bU[half_px_py] = yuv->u;
+  i->bV[half_px_py] = yuv->v;
 }
 
 void Get_Pixel_yuv(YUV_IMAGE_T * i, int px, int py, YUV_T * yuv) {
-  int half_px = px/2, half_py = py/2;
+  int half_px_py = (px/2 + (py/2*i->half_w));
   yuv->y = i->bY[px + py*i->w];
-  yuv->u = i->bU[half_px+half_py*i->half_w];
-  yuv->v = i->bV[half_px+half_py*i->half_w];
+  yuv->u = i->bU[half_px_py];
+  yuv->v = i->bV[half_px_py];
 }
 
 int Sq_UV_Difference_yuv(YUV_T * c1, YUV_T * c2){
@@ -219,10 +224,9 @@ void Translate_Image(int dX, int dY, float dTheta) {
 void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * color)
 // Scan line conversion code from Michael Abrash
 {
-  int pX, pY;
-#if DRAW_RUNS_AS_LINES
-  int peX, peY;
-#endif
+  int pX, pY, half_px_py;
+  
+  float32x4_t y_4, u_4, v_4, by_4, bu_4, bv_4;
 	
   int Temp, AdjUp, AdjDown, ErrorTerm, XAdvance, XDelta, YDelta;	 
   int WholeStep, InitialPixelCount, FinalPixelCount, i,j, RunLength;
@@ -271,44 +275,41 @@ void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * co
   /* Vertical Line case */
   if (XDelta == 0) {
     /* Vertical line */
-#if DRAW_RUNS_AS_LINES
-    pe.X = XEnd;
-    pe.Y = YEnd;
-    LCD_Fill_Rectangle(&p, &pe, color);
-#else		
-    for (i = 0; i <= YDelta; i++) {
+    for (i; i <= YDelta; i++) {
       pY++;
-      Set_Pixel_yuv(img, pX, pY, color);
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
     }
-#endif
+
     return;
   }
   
   /* Horizontal Line Case */
   if (YDelta == 0) {
     /* Horizontal line */
-#if DRAW_RUNS_AS_LINES
-    pe.X = XEnd;
-    peY = YEnd;
-    LCD_Fill_Rectangle(&p, &pe, color);
-#else
+
     for (i = 0; i <= XDelta; i++) {
-      Set_Pixel_yuv(img, pX, pY, color);
+      Set_Pixel_yuv(img, MAX(pX,0), MAX(pY,0), color);
       pX += XAdvance;
     }  
-#endif
+
     return;
   }
    
   /* Diagonal Case */
   if (XDelta == YDelta) {
     /* Diagonal line */
-    for (i = 0; i <= XDelta; i++)
-      {
-	Set_Pixel_yuv(img, pX, pY, color); 
-	pX += XAdvance;
-	pY++;
-      }
+    for (i; i <= XDelta; i++){
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      pY++;
+    }
+    
     return;
   }
    
@@ -357,23 +358,44 @@ void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * co
       ErrorTerm += YDelta;
     
     /* Draw the first, partial run of pixels */
-#if DRAW_RUNS_AS_LINES // TODO: Fixing here
-    pX = XStart;
-    pY = peY = YStart;
-    if (XAdvance > 0) {
-      pe.X = XStart + InitialPixelCount;
-      LCD_Fill_Rectangle(&p, &pe, color);
-    } else {
-      pe.X = XStart - InitialPixelCount;
-      LCD_Fill_Rectangle(&pe, &p, color);
-    }
-    pX = peX;
-#else
-    for (j = 0; j < InitialPixelCount; j++) {
-      Set_Pixel_yuv(img, pX, pY, color); 
+
+    for (j = 0; j < 4 || j < InitialPixelCount; j+=4) {      
+      /*
+      y_4 = vld1q_f32(&color->y);
+      u_4 = vld1q_f32(&color->u);
+      u_4 = vld1q_f32(&color->u);
+      */
+      
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
       pX += XAdvance;
     }
-#endif
+    for (j; j < InitialPixelCount-4; j++) {
+      //Set_Pixel_yuv(img, pX, pY, color); 
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+    }
+
     pY++;
     
     /* Draw all full runs */
@@ -388,32 +410,74 @@ void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * co
       }
 
       /* Draw this scan line's run */
-#if DRAW_RUNS_AS_LINES
-      peY = pY;
-      pe.X = pX + RunLength;
-      LCD_Fill_Rectangle(&p, &pe, color);
-      pX = pe.X;
-#else
-      for (j = 0; j < RunLength; j++) {
-	Set_Pixel_yuv(img, pX, pY, color);
-	pX += XAdvance;
+
+      for (j = 0; j < 4 || j < RunLength; j+=4) {
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pX += XAdvance;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pX += XAdvance;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pX += XAdvance;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pX += XAdvance;
       }
-#endif
+      for (j; j < RunLength-4; j++) {
+        //Set_Pixel_yuv(img, pX, pY, color);
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pX += XAdvance;
+      }
+
       pY++;
     }
     
     /* Draw the final run of pixels */
-#if DRAW_RUNS_AS_LINES
-    peY = pY;
-    pe.X = pe.X + FinalPixelCount;
-    LCD_Fill_Rectangle(&p, &pe, color);
-    pX = pe.X;
-#else
-    for (j = 0; j < FinalPixelCount; j++) {
-      Set_Pixel_yuv(img, pX, pY, color);
+
+    for (j = 0; j < 4 || j < FinalPixelCount; j+=4) {
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
       pX += XAdvance;
     }
-#endif
+    for (j; j < FinalPixelCount-4; j++) {
+      //Set_Pixel_yuv(img, pX, pY, color);
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pX += XAdvance;
+    }
+
     pY++;
     
     return;
@@ -463,19 +527,54 @@ void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * co
     }
       
     /* Draw the first, partial run of pixels */
-#if DRAW_RUNS_AS_LINES
-    pX = pe.X = XStart;
-    pY = YStart;
-    peY = YStart + InitialPixelCount;
-    LCD_Fill_Rectangle(&p, &pe, color);
-#else
-    for (j = 0; j < InitialPixelCount; j++) {
-      Set_Pixel_yuv(img, pX, pY, color);
+
+    for (j = 0; j < 4 || j < InitialPixelCount; j+=4) {
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+    }
+    for (j; j < InitialPixelCount - 4 ; j++) {
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
       pY++;
     }
     /* Update x,y position */
     pX += XAdvance;
-#endif
+
       
     /* Draw all full runs */
     for (i = 0; i < (XDelta - 1); i++) {
@@ -490,35 +589,77 @@ void Draw_Line(YUV_IMAGE_T * img, int p1X, int p1Y, int p2X, int p2Y, YUV_T * co
       }
 				
       /* Draw this scan line's run */
-#if DRAW_RUNS_AS_LINES
-      pX = pe.X = XStart;
-      pY = YStart;
-      peY = YStart + RunLength;
-      LCD_Fill_Rectangle(&p, &pe, color);
-#else
-      for (j = 0; j < RunLength; j++) {
-	Set_Pixel_yuv(img, pX, pY, color); 
-	pY++;
+
+      for (j = 0; j < 4 || j < RunLength; j+=4) {
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pY++;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pY++;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pY++;
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pY++;
+      }
+      for (j; j < RunLength - 4; j++) {
+        //Set_Pixel_yuv(img, pX, pY, color); 
+        half_px_py = (pX/2 + (pY/2*img->half_w));
+        img->bY[pX + pY*img->w] = color->y;
+        img->bU[half_px_py] = color->u;
+        img->bV[half_px_py] = color->v;
+        pY++;
       }
       /* Update x,y position */
       pX += XAdvance;
-#endif
+
     }
       
     /* Draw the final run of pixels */
-#if DRAW_RUNS_AS_LINES
-    pX = pe.X= XStart;
-    pY = YStart;
-    peY = YStart + FinalPixelCount;
-    LCD_Fill_Rectangle(&p, &pe, color);
-#else
-    for (j= 0; j < FinalPixelCount; j++) {
-      Set_Pixel_yuv(img, pX, pY, color);
+
+    for (j= 0; j < 4 || j < FinalPixelCount; j+=4) {
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
+      pY++;
+    }
+    for (j; j < FinalPixelCount - 4; j++) {
+      //Set_Pixel_yuv(img, pX, pY, color);
+      half_px_py = (pX/2 + (pY/2*img->half_w));
+      img->bY[pX + pY*img->w] = color->y;
+      img->bU[half_px_py] = color->u;
+      img->bV[half_px_py] = color->v;
       pY++;
     }
     /* Update x,y position */
     pX += XAdvance;
-#endif    
+
     return;
   }
 }

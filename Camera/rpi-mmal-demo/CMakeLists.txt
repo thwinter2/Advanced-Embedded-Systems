@@ -23,7 +23,7 @@ add_executable(istool1 keyboard.c is_options.c buffer_demo_base.c yuv.c video_ca
 
 # target_compile_options(mmal_buffer_demo PRIVATE "-O3")
 # target_compile_options(mmal_buffer_demo2 PRIVATE "-O3")
-target_compile_options(istool1 PRIVATE "-O3" "-g")
+target_compile_options(istool1 PRIVATE "-mcpu=cortex-a72" "-O3" "-g" "-mfloat-abi=hard" "-funsafe-math-optimizations" "-munaligned-access" "-Ofast" "-ffinite-math-only" "-fno-math-errno" "-mvectorize-with-neon-quad")
 
 # target_link_libraries(mmal_buffer_demo mmal_core mmal_util mmal_vc_client vcos bcm_host rt)
 # target_link_libraries(mmal_buffer_demo2 mmal_core mmal_util mmal_vc_client vcos bcm_host rt)

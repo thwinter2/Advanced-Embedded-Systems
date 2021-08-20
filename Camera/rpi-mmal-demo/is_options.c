@@ -3,8 +3,8 @@
 int run=1;
 int invert=0, invert_rect=0;
 int update_target_color=0;
-int show_data=0;
-int color_threshold=300;
+int show_data=1;
+int color_threshold=100;
 uint8_t ServoTiltDegree = 90;
 uint8_t ServoPanDegree = 90;
 int imstab_servo = 0;
